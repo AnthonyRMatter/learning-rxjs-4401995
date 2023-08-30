@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, last, from } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,12 @@ export class AppComponent {
     this.temperatureInputList.push(temperature);
   }
 
-  displayValues() {}
+  displayValues() {
+    this.temperatureSubject$ = from(this.temperatureInputList);
+    this.temperatureSubject$.pipe(last()).subscribe((temperature) => {
+      this.temperatureDataList.push(temperature);
+    });
+  }
 
   setInputTemperature(event: Event) {
     const input = (event.target as HTMLInputElement).value;
